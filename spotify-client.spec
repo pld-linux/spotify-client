@@ -16,7 +16,7 @@
 Summary:	Spotify music player native client
 Name:		spotify-client
 Version:	0.9.1.55.gbdd3b79.203
-Release:	0.4
+Release:	0.7
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
 Group:		Applications/Multimedia
@@ -48,9 +48,8 @@ ExclusiveArch:	%{ix86} %{x8664}
 # Bundled, we should not Provide these
 %define		_noautoprovfiles	%{_libdir}/spotify-client/.*[.]so
 
-# Filter away the deps om bundled libs and those substituted
-# by symlinks and explicit Requires:.
-%define		_noautoreq		^libssl.so.0.9.8 ^libcrypto.so.0.9.8 ^libcef.so [.]so[.][0-2][a-f]
+# Filter away the deps of bundled libs and those substituted by symlinks and explicit Requires:.
+%define		_noautoreq		'^libssl.so.0.9.8\\(OPENSSL_0.9.8\\)' '^libcrypto.so.0.9.8\\(OPENSSL_0.9.8\\)' ^libcef.so [.]so[.][0-2][a-f]
 
 %description
 Think of Spotify as your new music collection. Your library. Only this
@@ -77,6 +76,10 @@ and no big dent in your hard drive.
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+# use libs from openssl.spec@OPENSSL_0_9_8
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libcrypto.so.0.9.8
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libssl.so.0.9.8
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,9 +108,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/spotify-client/locales
 %attr(755,root,root) %{_libdir}/spotify-client/spotify
 %attr(755,root,root) %{_libdir}/spotify-client/libcef.so
-# openssl
-%attr(755,root,root) %{_libdir}/spotify-client/libcrypto.so.0.9.8
-%attr(755,root,root) %{_libdir}/spotify-client/libssl.so.0.9.8
 # nss/nspr
 %attr(755,root,root) %{_libdir}/spotify-client/libnspr4.so.0d
 %attr(755,root,root) %{_libdir}/spotify-client/libnss3.so.1d
