@@ -28,6 +28,7 @@ Source2:	%{repo}/%{name}_%{version}-1_amd64.deb
 # NoSource2-md5:	e5d6049689a8ef0f3699986e47478fe2
 NoSource:	1
 BuildRequires:	desktop-file-utils
+BuildRequires:	glibc-misc
 BuildRequires:	python-devel
 Requires:	gtk-update-icon-cache
 Requires:	hicolor-icon-theme
