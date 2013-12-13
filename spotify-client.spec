@@ -1,5 +1,5 @@
 # These refer to the installer, not the main package:
-%define commit      23b12878e8f544bff886babf0978c1b24d087fb1
+%define commit      5556bae39439738ebf3788363598b785068d9ba1
 %define shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define repo        http://repository.spotify.com/pool/non-free/s/spotify
@@ -15,19 +15,19 @@
 %endif
 Summary:	Spotify music player native client
 Name:		spotify-client
-Version:	0.9.1.55.gbdd3b79.203
-Release:	0.7
+Version:	0.9.4.183.g644e24e.428
+Release:	0.1
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
 Group:		Applications/Multimedia
 URL:		http://www.spotify.com/se/blog/archives/2010/07/12/linux/
 Source0:	%{github_repo}/spotify-make-%{shortcommit}.tar.gz
-# Source0-md5:	42a54aa575096ee392d4c53bf464b777
+# Source0-md5:	00e9f46e791c6c1e1c6c9c8d51047883
 Source1:	%{repo}/%{name}_%{version}-1_i386.deb
-# NoSource1-md5:	4aeb0de3138d9b89a805bde84a2ac6c8
+# NoSource1-md5:	
 NoSource:	1
 Source2:	%{repo}/%{name}_%{version}-1_amd64.deb
-# NoSource2-md5:	5be8c87214685bab303f4c4ec02d8264
+# NoSource2-md5:	
 NoSource:	1
 BuildRequires:	desktop-file-utils
 BuildRequires:	python-devel
@@ -77,10 +77,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# use libs from openssl.spec@OPENSSL_0_9_8
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libcrypto.so.0.9.8
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libssl.so.0.9.8
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -101,16 +97,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/*/apps/spotify-client.png
 %{_datadir}/%{name}
 %dir %{_libdir}/%{name}
-%{_libdir}/spotify-client/Data
-%{_libdir}/spotify-client/chrome.pak
-%{_libdir}/spotify-client/devtools_resources.pak
+%dir %{_libdir}/spotify-client/Data
+%{_libdir}/spotify-client/Data/locales
+%attr(755,root,root) %{_libdir}/spotify-client/Data/SpotifyHelper
+%{_libdir}/spotify-client/Data/apps.zip
+%{_libdir}/spotify-client/Data/cef.pak
+%{_libdir}/spotify-client/Data/devtools_resources.pak
+%{_libdir}/spotify-client/Data/resources.zip
 %{_libdir}/spotify-client/licenses.xhtml
-%{_libdir}/spotify-client/locales
 %attr(755,root,root) %{_libdir}/spotify-client/spotify
 %attr(755,root,root) %{_libdir}/spotify-client/libcef.so
-# nss/nspr
-%attr(755,root,root) %{_libdir}/spotify-client/libnspr4.so.0d
-%attr(755,root,root) %{_libdir}/spotify-client/libnss3.so.1d
-%attr(755,root,root) %{_libdir}/spotify-client/libnssutil3.so.1d
-%attr(755,root,root) %{_libdir}/spotify-client/libplc4.so.0d
-%attr(755,root,root) %{_libdir}/spotify-client/libsmime3.so.1d
+%attr(755,root,root) %{_libdir}/spotify-client/libudev.so.0
