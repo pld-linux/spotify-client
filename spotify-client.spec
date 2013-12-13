@@ -44,9 +44,8 @@ Requires:	libnssutil3.so%{?req_64}
 Requires:	libplc4.so%{?req_64}
 Requires:	libsmime3.so%{?req_64}
 Provides:	spotify = %{version}-%{release}
-# https://lists.rpmfusion.org/pipermail/rpmfusion-developers/2012-November/013934.html
-Provides:	bundled(libssl) = 0.9.8
 ExclusiveArch:	%{ix86} %{x8664}
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # Bundled, we should not Provide these
 %define		_noautoprovfiles	%{_libdir}/spotify-client/.*[.]so
