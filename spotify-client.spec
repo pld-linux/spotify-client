@@ -31,6 +31,7 @@ BuildRequires:	bash
 BuildRequires:	desktop-file-utils
 BuildRequires:	glibc-misc
 BuildRequires:	lsb-release
+BuildRequires:	nss
 BuildRequires:	python-devel
 BuildRequires:	python-modules
 Requires:	gtk-update-icon-cache
