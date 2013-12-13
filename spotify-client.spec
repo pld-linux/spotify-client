@@ -1,7 +1,5 @@
 # These refer to the installer, not the main package:
-%define commit      5556bae39439738ebf3788363598b785068d9ba1
-%define shortcommit %(c=%{commit}; echo ${c:0:7})
-
+%define commit      5556bae
 %define repo        http://repository.spotify.com/pool/non-free/s/spotify
 %define github_repo https://github.com/leamas/spotify-make/archive/%{commit}
 
@@ -16,12 +14,12 @@
 Summary:	Spotify music player native client
 Name:		spotify-client
 Version:	0.9.4.183.g644e24e.428
-Release:	0.2
+Release:	0.3
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
 Group:		Applications/Multimedia
 URL:		http://www.spotify.com/se/blog/archives/2010/07/12/linux/
-Source0:	%{github_repo}/spotify-make-%{shortcommit}.tar.gz
+Source0:	%{github_repo}/spotify-make-%{commit}.tar.gz
 # Source0-md5:	00e9f46e791c6c1e1c6c9c8d51047883
 Source1:	%{repo}/%{name}_%{version}-1_i386.deb
 # NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
@@ -60,7 +58,8 @@ because the music plays live, there’s no need to wait for downloads
 and no big dent in your hard drive.
 
 %prep
-%setup -qn spotify-make-%{commit}
+%setup -qc
+mv spotify-make-%{commit}*/* .
 
 %build
 ./configure \
