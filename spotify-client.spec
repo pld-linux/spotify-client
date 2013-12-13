@@ -24,10 +24,10 @@ URL:		http://www.spotify.com/se/blog/archives/2010/07/12/linux/
 Source0:	%{github_repo}/spotify-make-%{shortcommit}.tar.gz
 # Source0-md5:	00e9f46e791c6c1e1c6c9c8d51047883
 Source1:	%{repo}/%{name}_%{version}-1_i386.deb
-# NoSource1-md5:	
+# NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
 NoSource:	1
 Source2:	%{repo}/%{name}_%{version}-1_amd64.deb
-# NoSource2-md5:	
+# NoSource2-md5:	e5d6049689a8ef0f3699986e47478fe2
 NoSource:	1
 BuildRequires:	desktop-file-utils
 BuildRequires:	python-devel
