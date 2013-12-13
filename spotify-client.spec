@@ -16,7 +16,7 @@
 Summary:	Spotify music player native client
 Name:		spotify-client
 Version:	0.9.4.183.g644e24e.428
-Release:	0.1
+Release:	0.2
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
 Group:		Applications/Multimedia
@@ -77,6 +77,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# use libs from openssl.spec@OPENSSL_0_9_8
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libcrypto.so.0.9.8
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libssl.so.0.9.8
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -108,3 +112,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/spotify-client/spotify
 %attr(755,root,root) %{_libdir}/spotify-client/libcef.so
 %attr(755,root,root) %{_libdir}/spotify-client/libudev.so.0
+
+# nss/nspr
+%attr(755,root,root) %{_libdir}/spotify-client/libnspr4.so.0d
+%attr(755,root,root) %{_libdir}/spotify-client/libnss3.so.1d
+%attr(755,root,root) %{_libdir}/spotify-client/libnssutil3.so.1d
+%attr(755,root,root) %{_libdir}/spotify-client/libplc4.so.0d
+%attr(755,root,root) %{_libdir}/spotify-client/libsmime3.so.1d
