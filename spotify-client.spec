@@ -1,5 +1,12 @@
+#
+# Note for 32 bits you need to build an older release
+# see the spotify-client-0.9.4 branch
+#
+# Requires gcrypt built from the gcrypt-1.5 branch
+#
+
 # These refer to the installer, not the main package:
-%define commit      5556bae
+%define commit      5a2e25f
 %define repo        http://repository.spotify.com/pool/non-free/s/spotify
 %define github_repo https://github.com/leamas/spotify-make/archive/%{commit}
 
@@ -13,20 +20,20 @@
 %endif
 Summary:	Spotify music player native client
 Name:		spotify-client
-Version:	0.9.4.183.g644e24e.428
-Release:	0.3
+Version:	0.9.10.17.g4129e1c.78
+Release:	0.1
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
 Group:		Applications/Multimedia
 URL:		http://www.spotify.com/se/blog/archives/2010/07/12/linux/
 Source0:	%{github_repo}/spotify-make-%{commit}.tar.gz
-# Source0-md5:	00e9f46e791c6c1e1c6c9c8d51047883
-Source1:	%{repo}/%{name}_%{version}-1_i386.deb
-# NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
-NoSource:	1
+# Source0-md5:	f18917d60a17758f064c93cbe025a65c
+#Source1:	%{repo}/%{name}_%{version}-1_i386.deb
+## NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
+#NoSource:	1
 Source2:	%{repo}/%{name}_%{version}-1_amd64.deb
-# NoSource2-md5:	e5d6049689a8ef0f3699986e47478fe2
-NoSource:	1
+# NoSource2-md5:	379cd63fb9f138928b30e3586a20ef29
+NoSource:	2
 BuildRequires:	bash
 BuildRequires:	desktop-file-utils
 BuildRequires:	glibc-misc
@@ -37,21 +44,16 @@ BuildRequires:	python-modules
 Requires:	gtk-update-icon-cache
 Requires:	hicolor-icon-theme
 Requires:	zenity
-# Symlinked, not picked up by autorequire (all 5).
-Requires:	libnspr4.so%{?req_64}
-Requires:	libnss3.so%{?req_64}
-Requires:	libnssutil3.so%{?req_64}
-Requires:	libplc4.so%{?req_64}
-Requires:	libsmime3.so%{?req_64}
 Provides:	spotify = %{version}-%{release}
-ExclusiveArch:	%{ix86} %{x8664}
+# 0.9.10 is 64-bit only :(
+ExclusiveArch:	%{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # Bundled, we should not Provide these
 %define		_noautoprovfiles	%{_libdir}/spotify-client/.*[.]so
 
-# Filter away the deps of bundled libs and those substituted by symlinks and explicit Requires:.
-%define		_noautoreq		'^libssl.so.0.9.8\\(OPENSSL_0.9.8\\)' '^libcrypto.so.0.9.8\\(OPENSSL_0.9.8\\)' ^libcef.so [.]so[.][0-2][a-f]
+# Filter away the deps not provided by our packages
+%define		_noautoreq		'^libssl.so.1.0.0\\(OPENSSL_1.0.0\\)' '^libcrypto.so.1.0.0\\(OPENSSL_1.0.0\\)' ^libcef.so ^libudev.so
 
 %description
 Think of Spotify as your new music collection. Your library. Only this
@@ -80,9 +82,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# use libs from openssl.spec@OPENSSL_0_9_8
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libcrypto.so.0.9.8
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/libssl.so.0.9.8
+# allow dependency gathering
+chmod a+x $RPM_BUILD_ROOT%{_libdir}/spotify-client/libcef.so
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -115,10 +116,3 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/spotify-client/spotify
 %attr(755,root,root) %{_libdir}/spotify-client/libcef.so
 %attr(755,root,root) %{_libdir}/spotify-client/libudev.so.0
-
-# nss/nspr
-%attr(755,root,root) %{_libdir}/spotify-client/libnspr4.so.0d
-%attr(755,root,root) %{_libdir}/spotify-client/libnss3.so.1d
-%attr(755,root,root) %{_libdir}/spotify-client/libnssutil3.so.1d
-%attr(755,root,root) %{_libdir}/spotify-client/libplc4.so.0d
-%attr(755,root,root) %{_libdir}/spotify-client/libsmime3.so.1d
