@@ -20,7 +20,7 @@
 %endif
 Summary:	Spotify music player native client
 Name:		spotify-client
-Version:	0.9.10.17.g4129e1c.78
+Version:	0.9.11.27.g2b1a638.81
 Release:	0.1
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
@@ -32,7 +32,7 @@ Source0:	%{github_repo}/spotify-make-%{commit}.tar.gz
 ## NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
 #NoSource:	1
 Source2:	%{repo}/%{name}_%{version}-1_amd64.deb
-# NoSource2-md5:	379cd63fb9f138928b30e3586a20ef29
+# NoSource2-md5:	778a0150fc9c0205f06a620a60f1365c
 NoSource:	2
 BuildRequires:	bash
 BuildRequires:	desktop-file-utils
@@ -108,6 +108,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/spotify-client/Data
 %{_libdir}/spotify-client/Data/locales
 %attr(755,root,root) %{_libdir}/spotify-client/Data/SpotifyHelper
+%attr(755,root,root) %{_libdir}/spotify-client/Data/libffmpegsumo.so
 %{_libdir}/spotify-client/Data/apps.zip
 %{_libdir}/spotify-client/Data/cef.pak
 %{_libdir}/spotify-client/Data/devtools_resources.pak
