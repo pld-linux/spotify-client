@@ -6,9 +6,9 @@
 #
 
 # These refer to the installer, not the main package:
-%define commit      5a2e25f
-%define repo        http://repository.spotify.com/pool/non-free/s/spotify
+%define commit      ab6afda
 %define github_repo https://github.com/leamas/spotify-make/archive/%{commit}
+%define repo        http://repository.spotify.com/pool/non-free/s/spotify
 
 # We cannot strip this binary (licensing restrictions).
 %define debug_package %{nil}
@@ -21,13 +21,13 @@
 Summary:	Spotify music player native client
 Name:		spotify-client
 Version:	0.9.11.27.g2b1a638.81
-Release:	0.1
+Release:	0.5
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
 Group:		Applications/Multimedia
 URL:		http://www.spotify.com/se/blog/archives/2010/07/12/linux/
 Source0:	%{github_repo}/spotify-make-%{commit}.tar.gz
-# Source0-md5:	f18917d60a17758f064c93cbe025a65c
+# Source0-md5:	df1ee6fd708f4c6e0dd3ad52c05705a2
 #Source1:	%{repo}/%{name}_%{version}-1_i386.deb
 ## NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
 #NoSource:	1
@@ -65,7 +65,7 @@ and no big dent in your hard drive.
 
 %prep
 %setup -qc
-mv spotify-make-%{commit}*/* .
+mv spotify-make-*/* .
 
 %build
 ./configure \
@@ -79,8 +79,12 @@ mv spotify-make-%{commit}*/* .
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_datadir}/appdata
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+# avoid requiring gcrypt 1.5 at build time
+ln -sf /%{_lib}/libgcrypt.so.11 $RPM_BUILD_ROOT%{_libdir}/spotify-client
 
 # allow dependency gathering
 chmod a+x $RPM_BUILD_ROOT%{_libdir}/spotify-client/libcef.so
@@ -103,6 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/spotify.1*
 %{_desktopdir}/spotify.desktop
 %{_iconsdir}/hicolor/*/apps/spotify-client.png
+%{_datadir}/appdata/spotify.xml
 %{_datadir}/%{name}
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/spotify-client/Data
@@ -116,4 +121,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/spotify-client/licenses.xhtml
 %attr(755,root,root) %{_libdir}/spotify-client/spotify
 %attr(755,root,root) %{_libdir}/spotify-client/libcef.so
+%attr(755,root,root) %{_libdir}/spotify-client/libgcrypt.so.11
 %attr(755,root,root) %{_libdir}/spotify-client/libudev.so.0
