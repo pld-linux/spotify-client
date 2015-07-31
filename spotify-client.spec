@@ -6,9 +6,11 @@
 #
 
 # These refer to the installer, not the main package:
-%define commit      ab6afda
+%define commit      8597389ba7
 %define github_repo https://github.com/leamas/spotify-make/archive/%{commit}
-%define repo        http://repository.spotify.com/pool/non-free/s/spotify
+
+# main package source
+%define repo        http://repository.spotify.com/pool/non-free/s/spotify-client
 
 # We cannot strip this binary (licensing restrictions).
 %define debug_package %{nil}
@@ -20,19 +22,19 @@
 %endif
 Summary:	Spotify music player native client
 Name:		spotify-client
-Version:	0.9.11.27.g2b1a638.81
-Release:	0.5
+Version:	1.0.11.131.gf4d47cb0
+Release:	0.1
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
 Group:		Applications/Multimedia
 URL:		http://www.spotify.com/se/blog/archives/2010/07/12/linux/
 Source0:	%{github_repo}/spotify-make-%{commit}.tar.gz
-# Source0-md5:	df1ee6fd708f4c6e0dd3ad52c05705a2
+# Source0-md5:	42665a32532dc2a50f68c2841941f7e8
 #Source1:	%{repo}/%{name}_%{version}-1_i386.deb
 ## NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
 #NoSource:	1
-Source2:	%{repo}/%{name}_%{version}-1_amd64.deb
-# NoSource2-md5:	778a0150fc9c0205f06a620a60f1365c
+Source2:	%{repo}/%{name}_%{version}_amd64.deb
+# NoSource2-md5:	af4bd4604c29d5d0ed2dde6e84453537
 NoSource:	2
 BuildRequires:	bash
 BuildRequires:	desktop-file-utils
@@ -53,7 +55,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautoprovfiles	%{_libdir}/spotify-client/.*[.]so
 
 # Filter away the deps not provided by our packages
-%define		_noautoreq		'^libssl.so.1.0.0\\(OPENSSL_1.0.0\\)' '^libcrypto.so.1.0.0\\(OPENSSL_1.0.0\\)' ^libcef.so ^libudev.so
+%define		_noautoreq		'^libssl.so.1.0.0\\(OPENSSL_1.0.0\\)' '^libcrypto.so.1.0.0\\(OPENSSL_1.0.0\\)' ^libcef.so ^libudev.so '^libcurl.so.4\\(CURL_OPENSSL_3\\)'
 
 %description
 Think of Spotify as your new music collection. Your library. Only this
@@ -100,26 +102,37 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc opt/spotify/spotify-client/licenses.xhtml
-%doc opt/spotify/spotify-client/readme.fedora
-%doc opt/spotify/spotify-client/changelog
+%doc README.md usr/share/spotify/README.txt
 %attr(755,root,root) %{_bindir}/spotify
 %{_mandir}/man1/spotify.1*
 %{_desktopdir}/spotify.desktop
 %{_iconsdir}/hicolor/*/apps/spotify-client.png
 %{_datadir}/appdata/spotify.xml
-%{_datadir}/%{name}
+
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/Apps
+%{_datadir}/%{name}/icons
+%{_datadir}/%{name}/locales
+%{_datadir}/%{name}/*.bin
+%{_datadir}/%{name}/*.dat
+%{_datadir}/%{name}/*.pak
+%{_datadir}/%{name}/control
+%{_datadir}/%{name}/md5sums
+%{_datadir}/%{name}/spotify.desktop
+%attr(755,root,root) %{_datadir}/%{name}/libffmpegsumo.so
+%attr(755,root,root) %{_datadir}/%{name}/spotify
+
+
 %dir %{_libdir}/%{name}
-%dir %{_libdir}/spotify-client/Data
-%{_libdir}/spotify-client/Data/locales
-%attr(755,root,root) %{_libdir}/spotify-client/Data/SpotifyHelper
-%attr(755,root,root) %{_libdir}/spotify-client/Data/libffmpegsumo.so
-%{_libdir}/spotify-client/Data/apps.zip
-%{_libdir}/spotify-client/Data/cef.pak
-%{_libdir}/spotify-client/Data/devtools_resources.pak
-%{_libdir}/spotify-client/Data/resources.zip
-%{_libdir}/spotify-client/licenses.xhtml
-%attr(755,root,root) %{_libdir}/spotify-client/spotify
-%attr(755,root,root) %{_libdir}/spotify-client/libcef.so
-%attr(755,root,root) %{_libdir}/spotify-client/libgcrypt.so.11
-%attr(755,root,root) %{_libdir}/spotify-client/libudev.so.0
+%dir %{_libdir}/%{name}/Data
+%{_libdir}/%{name}/locales
+%{_libdir}/%{name}/*.bin
+%{_libdir}/%{name}/*.dat
+%{_libdir}/%{name}/*.pak
+%{_libdir}/%{name}/control
+%{_libdir}/%{name}/md5sums
+%{_libdir}/%{name}/spotify.desktop
+%attr(755,root,root) %{_libdir}/%{name}/spotify
+%attr(755,root,root) %{_libdir}/%{name}/libcef.so
+%attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
+%attr(755,root,root) %{_libdir}/%{name}/libgcrypt.so.11
