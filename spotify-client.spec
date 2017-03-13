@@ -1,6 +1,5 @@
 #
-# Note for 32 bits you need to build an older release
-# see the spotify-client-0.9.4 branch
+# Note: 32-bit build not tested
 #
 # Requires gcrypt built from the gcrypt-1.5 branch
 #
@@ -22,7 +21,7 @@
 %endif
 Summary:	Spotify music player native client
 Name:		spotify-client
-Version:	1.0.11.131.gf4d47cb0
+Version:	1.0.49.125.g72ee7853
 Release:	0.1
 # http://community.spotify.com/t5/Desktop-Linux/What-license-does-the-linux-spotify-client-use/td-p/173356
 License:	No modification permitted, non-redistributable
@@ -30,11 +29,11 @@ Group:		Applications/Multimedia
 URL:		http://www.spotify.com/se/blog/archives/2010/07/12/linux/
 Source0:	%{github_repo}/spotify-make-%{commit}.tar.gz
 # Source0-md5:	42665a32532dc2a50f68c2841941f7e8
-#Source1:	%{repo}/%{name}_%{version}-1_i386.deb
+Source1:	%{repo}/%{name}_%{version}-22_i386.deb
 ## NoSource1-md5:	20113ac3d6760ded6940fef8143fa9a3
-#NoSource:	1
-Source2:	%{repo}/%{name}_%{version}_amd64.deb
-# NoSource2-md5:	af4bd4604c29d5d0ed2dde6e84453537
+NoSource:	1
+Source2:	%{repo}/%{name}_%{version}-111_amd64.deb
+# NoSource2-md5:	4b9e1fa9b25543700cdfe27a4b2db8e0
 NoSource:	2
 BuildRequires:	bash
 BuildRequires:	desktop-file-utils
@@ -48,7 +47,7 @@ Requires:	hicolor-icon-theme
 Requires:	zenity
 Provides:	spotify = %{version}-%{release}
 # 0.9.10 is 64-bit only :(
-ExclusiveArch:	%{x8664}
+ExclusiveArch:	%{x8664} %{x86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # Bundled, we should not Provide these
@@ -91,6 +90,8 @@ ln -sf /%{_lib}/libgcrypt.so.11 $RPM_BUILD_ROOT%{_libdir}/spotify-client
 # allow dependency gathering
 chmod a+x $RPM_BUILD_ROOT%{_libdir}/spotify-client/libcef.so
 
+rm -f $RPM_BUILD_ROOT{%{_libdir},%{_datadir}}/%{name}/{README.md,Makefile}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -102,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.md usr/share/spotify/README.txt
+%doc README.md
 %attr(755,root,root) %{_bindir}/spotify
 %{_mandir}/man1/spotify.1*
 %{_desktopdir}/spotify.desktop
@@ -119,12 +120,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/control
 %{_datadir}/%{name}/md5sums
 %{_datadir}/%{name}/spotify.desktop
-%attr(755,root,root) %{_datadir}/%{name}/libffmpegsumo.so
+%{_datadir}/%{name}/spotify-*.gpg
+%attr(755,root,root) %{_datadir}/%{name}/libwidevinecdmadapter.so
 %attr(755,root,root) %{_datadir}/%{name}/spotify
 
 
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/Data
+%{_libdir}/%{name}/Apps
+%{_libdir}/%{name}/icons
 %{_libdir}/%{name}/locales
 %{_libdir}/%{name}/*.bin
 %{_libdir}/%{name}/*.dat
@@ -132,7 +136,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/%{name}/control
 %{_libdir}/%{name}/md5sums
 %{_libdir}/%{name}/spotify.desktop
+%{_libdir}/%{name}/spotify-*.gpg
 %attr(755,root,root) %{_libdir}/%{name}/spotify
 %attr(755,root,root) %{_libdir}/%{name}/libcef.so
-%attr(755,root,root) %{_libdir}/%{name}/libffmpegsumo.so
+%attr(755,root,root) %{_libdir}/%{name}/libwidevinecdmadapter.so
 %attr(755,root,root) %{_libdir}/%{name}/libgcrypt.so.11
